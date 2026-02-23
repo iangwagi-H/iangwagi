@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IAN GWAGI H</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #0a0a0a;
+    --white: #f7f5f0;
+    --ochre: #CDA15E;
+    --gray: #888;
+    --light: #e8e4dc;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Lato', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--white);
+    color: var(--black);
+    font-family: var(--sans);
+    font-weight: 300;
+    cursor: none;
+    overflow-x: hidden;
+  }
+
+  /* CURSOR */
+  .cursor {
+    width: 8px; height: 8px;
+    background: var(--ochre);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease, width 0.2s ease, height 0.2s ease;
+    transform: translate(-50%, -50%);
+  }
+  .cursor.hover { width: 24px; height: 24px; background: transparent; border: 1px solid var(--ochre); }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 28px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: background 0.4s ease, padding 0.4s ease;
+    mix-blend-mode: normal;
+  }
+  nav.solid {
+    background: rgba(247,245,240,0.96);
+    backdrop-filter: blur(8px);
+    padding: 18px 60px;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  nav.on-hero .logo, nav.on-hero .nav-links a { color: var(--white); }
+  nav.on-hero .nav-links a::after { background: var(--white); }
+  .logo {
+    font-family: var(--serif);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--black);
+    transition: color 0.4s;
+  }
+  .nav-links { display: flex; gap: 40px; list-style: none; align-items: center; }
+  .nav-links a {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--black);
+    position: relative;
+    transition: color 0.4s;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -2px; left: 0;
+    width: 0; height: 1px;
+    background: var(--black);
+    transition: width 0.3s ease, background 0.4s;
+  }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-newsletter {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    border: 1px solid currentColor;
+    text-decoration: none;
+    color: var(--black);
+    transition: background 0.3s, color 0.3s, border-color 0.4s;
+  }
+  nav.on-hero .nav-newsletter { color: var(--white); border-color: var(--white); }
+  .nav-newsletter:hover { background: var(--ochre); color: var(--white); border-color: var(--ochre); }
+
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: none; }
+  .hamburger span { display: block; width: 24px; height: 1px; background: currentColor; transition: 0.3s; }
+
+  /* ======= PAGE 1: HOME ======= */
+  #page-home { display: block; }
+  #page-work { display: none; }
+
+  /* HERO */
+  .hero {
+    height: 100vh;
+    position: relative;
+    display: flex; align-items: flex-end;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(160deg, #1a1208 0%, #0a0a0a 60%, #1c1308 100%);
+  }
+  .hero-texture {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 70% 30%, rgba(205,161,94,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 80% at 20% 80%, rgba(205,161,94,0.06) 0%, transparent 50%);
+  }
+  .hero-line {
+    position: absolute;
+    top: 0; left: 60px;
+    width: 1px; height: 0;
+    background: var(--ochre);
+    animation: lineGrow 1.2s 0.8s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
+  @keyframes lineGrow { to { height: 40vh; } }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 60px 80px;
+    max-width: 900px;
+  }
+  .hero-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ochre);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s 1s ease forwards;
+  }
+  .hero-headline {
+    font-family: var(--serif);
+    font-size: clamp(48px, 7vw, 96px);
+    font-weight: 400;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.9s 1.2s ease forwards;
+  }
+  .hero-headline em { font-style: italic; color: var(--ochre); }
+  .hero-sub {
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    line-height: 1.8;
+    color: rgba(247,245,240,0.55);
+    max-width: 440px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.9s 1.4s ease forwards;
+  }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 14px;
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--white); text-decoration: none;
+    opacity: 0;
+    animation: fadeUp 0.9s 1.6s ease forwards;
+    transition: color 0.3s;
+  }
+  .hero-cta:hover { color: var(--ochre); }
+  .hero-cta-line { width: 40px; height: 1px; background: currentColor; transition: width 0.3s; }
+  .hero-cta:hover .hero-cta-line { width: 60px; }
+
+  .hero-scroll {
+    position: absolute; bottom: 40px; right: 60px;
+    writing-mode: vertical-rl;
+    font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: rgba(247,245,240,0.35);
+    display: flex; align-items: center; gap: 12px;
+    opacity: 0; animation: fadeIn 1s 2s ease forwards;
+  }
+  .hero-scroll::after { content: ''; display: block; width: 1px; height: 40px; background: var(--ochre); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  /* FEATURED STRIP */
+  .featured-strip {
+    background: var(--black);
+    padding: 60px 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .strip-label {
+    position: absolute; top: 24px; left: 60px;
+    font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--ochre);
+  }
+  .strip-track {
+    display: flex; gap: 0;
+    animation: stripScroll 30s linear infinite;
+    width: max-content;
+  }
+  .strip-track:hover { animation-play-state: paused; }
+  .strip-item {
+    display: flex; align-items: center; gap: 24px;
+    padding: 0 60px;
+    border-right: 1px solid rgba(255,255,255,0.08);
+    white-space: nowrap;
+    cursor: none;
+  }
+  .strip-item-type {
+    font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--ochre);
+  }
+  .strip-item-title {
+    font-family: var(--serif);
+    font-size: 18px; font-style: italic;
+    color: rgba(247,245,240,0.85);
+    transition: color 0.3s;
+  }
+  .strip-item:hover .strip-item-title { color: var(--white); }
+  @keyframes stripScroll { to { transform: translateX(-50%); } }
+
+  /* SECTION TEMPLATE */
+  .section { padding: 120px 60px; }
+  .section-label {
+    font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--ochre); margin-bottom: 60px;
+    display: flex; align-items: center; gap: 20px;
+  }
+  .section-label::before { content: ''; display: block; width: 30px; height: 1px; background: var(--ochre); }
+  .section-heading {
+    font-family: var(--serif);
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 400; line-height: 1.1;
+    margin-bottom: 80px;
+  }
+  .section-heading em { font-style: italic; }
+
+  /* POETRY GRID */
+  .poetry-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--black);
+  }
+  .poem-card {
+    position: relative; overflow: hidden;
+    aspect-ratio: 3/4;
+    background: var(--black);
+    cursor: none;
+  }
+  .poem-card.large { grid-column: span 2; aspect-ratio: unset; min-height: 560px; }
+  .poem-card-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.4,0,0.2,1), filter 0.7s;
+    filter: grayscale(20%);
+  }
+  .poem-card-bg {
+    position: absolute; inset: 0;
+    transition: transform 0.7s cubic-bezier(0.4,0,0.2,1), filter 0.7s;
+  }
+  .poem-card:hover .poem-card-bg { transform: scale(1.04); filter: grayscale(40%); }
+  .poem-card-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.1) 50%, transparent 100%);
+    transition: opacity 0.4s;
+  }
+  .poem-card:hover .poem-card-overlay { opacity: 0.9; }
+  .poem-card-content {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 32px;
+  }
+  .poem-card-tag {
+    font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--ochre); margin-bottom: 10px;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.4s 0.05s, transform 0.4s 0.05s;
+  }
+  .poem-card:hover .poem-card-tag { opacity: 1; transform: translateY(0); }
+  .poem-card-title {
+    font-family: var(--serif);
+    font-size: clamp(20px, 2vw, 28px);
+    font-weight: 400; color: var(--white); line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .poem-card-excerpt {
+    font-size: 12px; line-height: 1.7;
+    color: rgba(247,245,240,0.6);
+    max-width: 380px;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.4s 0.1s, transform 0.4s 0.1s;
+  }
+  .poem-card:hover .poem-card-excerpt { opacity: 1; transform: translateY(0); }
+  .poem-card-date {
+    font-size: 9px; letter-spacing: 0.15em; color: rgba(247,245,240,0.35);
+    margin-top: 12px;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.4s 0.15s, transform 0.4s 0.15s;
+  }
+  .poem-card:hover .poem-card-date { opacity: 1; transform: translateY(0); }
+
+  /* Fake BG images using CSS gradients */
+  .bg-1 { background: linear-gradient(135deg, #1a0f00 0%, #2d1f0a 40%, #0a0500 100%); }
+  .bg-2 { background: linear-gradient(160deg, #060f10 0%, #0d2020 50%, #020a0a 100%); }
+  .bg-3 { background: linear-gradient(140deg, #100a00 0%, #1e140a 60%, #050200 100%); }
+  .bg-4 { background: linear-gradient(120deg, #0a0a0a 0%, #151515 50%, #080808 100%); }
+  .bg-5 { background: linear-gradient(150deg, #0f0800 0%, #231500 60%, #070300 100%); }
+
+  /* grain texture on cards */
+  .poem-card::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; opacity: 0.4;
+  }
+
+  .view-all {
+    display: inline-flex; align-items: center; gap: 16px;
+    margin-top: 60px;
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    text-decoration: none; color: var(--black);
+    border-bottom: 1px solid var(--black);
+    padding-bottom: 4px;
+    transition: color 0.3s, border-color 0.3s;
+  }
+  .view-all:hover { color: var(--ochre); border-color: var(--ochre); }
+
+  /* ESSAYS SECTION */
+  .essays-section { background: var(--black); color: var(--white); }
+  .essays-section .section-heading { color: var(--white); }
+  .essays-section .section-label { /* same */ }
+  .essays-layout { display: grid; grid-template-columns: 200px 1fr; gap: 80px; }
+  .essays-nav { list-style: none; padding-top: 8px; }
+  .essays-nav li {
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    color: rgba(247,245,240,0.4);
+    transition: color 0.3s;
+    cursor: none;
+  }
+  .essays-nav li:first-child { color: var(--ochre); }
+  .essays-nav li:hover { color: rgba(247,245,240,0.8); }
+  .essays-roll { display: flex; flex-direction: column; gap: 0; }
+  .essay-item {
+    display: grid; grid-template-columns: 240px 1fr;
+    gap: 40px; padding: 40px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    text-decoration: none; color: inherit;
+    transition: opacity 0.3s;
+    cursor: none;
+  }
+  .essay-item:hover { opacity: 0.75; }
+  .essay-img {
+    aspect-ratio: 4/3;
+    overflow: hidden;
+  }
+  .essay-img-inner {
+    width: 100%; height: 100%;
+    transition: transform 0.7s cubic-bezier(0.4,0,0.2,1);
+  }
+  .essay-item:hover .essay-img-inner { transform: scale(1.04); }
+  .essay-body { display: flex; flex-direction: column; justify-content: center; }
+  .essay-category {
+    font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--ochre); margin-bottom: 14px;
+  }
+  .essay-title {
+    font-family: var(--serif);
+    font-size: clamp(22px, 2.5vw, 32px);
+    font-weight: 400; line-height: 1.2;
+    color: var(--white); margin-bottom: 16px;
+  }
+  .essay-excerpt {
+    font-size: 13px; line-height: 1.8;
+    color: rgba(247,245,240,0.5); max-width: 480px;
+    margin-bottom: 20px;
+  }
+  .essay-read {
+    font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--ochre); display: flex; align-items: center; gap: 10px;
+  }
+  .essay-read::after { content: ''; display: block; width: 24px; height: 1px; background: var(--ochre); transition: width 0.3s; }
+  .essay-item:hover .essay-read::after { width: 40px; }
+
+  /* MUSIC SECTION */
+  .music-section { background: var(--light); }
+  .music-hero-band {
+    margin: 0 -60px;
+    height: 300px;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1208 50%, #0a0500 100%);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    margin-bottom: 80px;
+  }
+  .music-wave { position: absolute; bottom: 0; left: 0; right: 0; height: 60px; opacity: 0.15; }
+  .music-hero-text {
+    text-align: center; position: relative; z-index: 2;
+  }
+  .music-hero-text h3 {
+    font-family: var(--serif);
+    font-size: 42px; font-style: italic; font-weight: 400;
+    color: var(--white); margin-bottom: 12px;
+  }
+  .music-hero-text p { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ochre); }
+  .music-player-mock {
+    background: var(--black);
+    border-radius: 0;
+    padding: 24px 32px;
+    display: flex; align-items: center; gap: 24px;
+    max-width: 560px; margin: 0 auto 12px;
+  }
+  .play-btn {
+    width: 44px; height: 44px;
+    border: 1px solid var(--ochre);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: none; flex-shrink: 0;
+    transition: background 0.3s;
+  }
+  .play-btn:hover { background: var(--ochre); }
+  .play-btn svg { width: 14px; height: 14px; fill: var(--ochre); margin-left: 2px; }
+  .play-btn:hover svg { fill: var(--white); }
+  .player-info { flex: 1; }
+  .player-title { font-family: var(--serif); font-size: 16px; font-style: italic; color: var(--white); margin-bottom: 4px; }
+  .player-sub { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(247,245,240,0.4); }
+  .player-bar {
+    width: 100%; height: 1px; background: rgba(255,255,255,0.15);
+    position: relative; margin-top: 8px;
+  }
+  .player-progress { width: 38%; height: 100%; background: var(--ochre); }
+  .player-dot {
+    position: absolute; right: 62%; top: 50%;
+    transform: translate(50%, -50%);
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--ochre);
+  }
+  .music-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+    background: var(--black); margin: 0 -60px;
+  }
+  .music-tile {
+    aspect-ratio: 1;
+    position: relative; overflow: hidden;
+    cursor: none;
+  }
+  .music-tile-bg { width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
+  .music-tile:hover .music-tile-bg { transform: scale(1.06); }
+  .music-tile-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .music-tile:hover .music-tile-overlay { opacity: 1; }
+  .music-tile-play {
+    width: 48px; height: 48px;
+    border: 1px solid var(--white);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .music-tile-play svg { width: 16px; height: 16px; fill: var(--white); margin-left: 2px; }
+  .music-tile-info {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+    transform: translateY(10px); opacity: 0;
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  .music-tile:hover .music-tile-info { opacity: 1; transform: translateY(0); }
+  .music-tile-type { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ochre); margin-bottom: 4px; }
+  .music-tile-title { font-family: var(--serif); font-size: 14px; font-style: italic; color: var(--white); }
+
+  /* FOOD SECTION */
+  .food-section { padding: 120px 0; }
+  .food-section .section { padding: 0 60px 120px; }
+  .food-header { padding: 120px 60px 60px; }
+  .food-title-block {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: end;
+    margin-bottom: 80px;
+  }
+  .food-title-block .section-heading { margin-bottom: 0; }
+  .food-intro { font-size: 15px; line-height: 1.9; color: #555; padding-top: 8px; }
+  .food-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 2px; background: var(--black);
+    margin: 0 -0px;
+  }
+  .food-card {
+    position: relative; overflow: hidden;
+    cursor: none;
+  }
+  .food-card:nth-child(1) { grid-row: span 2; }
+  .food-card-img {
+    width: 100%; aspect-ratio: 4/3;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+  }
+  .food-card:nth-child(1) .food-card-img { aspect-ratio: unset; height: 100%; }
+  .food-card:hover .food-card-img { transform: scale(1.04); }
+  .food-card-body {
+    background: var(--white);
+    padding: 24px 28px;
+  }
+  .food-card-category { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--ochre); margin-bottom: 10px; }
+  .food-card-title { font-family: var(--serif); font-size: 20px; font-weight: 400; line-height: 1.2; margin-bottom: 10px; }
+  .food-card-snippet { font-size: 12px; line-height: 1.7; color: #777; }
+
+  /* bg colors for food cards */
+  .food-bg-1 { background: linear-gradient(160deg, #1a0800 0%, #2d1200 100%); }
+  .food-bg-2 { background: linear-gradient(140deg, #0a1200 0%, #121e00 100%); }
+  .food-bg-3 { background: linear-gradient(120deg, #100800 0%, #1e1000 100%); }
+  .food-bg-4 { background: linear-gradient(150deg, #050a0a 0%, #0a1414 100%); }
+  .food-bg-5 { background: linear-gradient(130deg, #0a0500 0%, #151000 100%); }
+
+  /* ABOUT SECTION */
+  .about-section {
+    padding: 160px 60px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 120px; align-items: center;
+    background: var(--white);
+    border-top: 1px solid rgba(0,0,0,0.08);
+  }
+  .about-img-wrap {
+    position: relative;
+  }
+  .about-img {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: linear-gradient(160deg, #1a1208 0%, #0a0502 60%, #1a0f00 100%);
+    position: relative; overflow: hidden;
+  }
+  .about-img::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+    opacity: 0.5;
+  }
+  .about-img-label {
+    position: absolute; bottom: -20px; right: -20px;
+    background: var(--ochre);
+    padding: 16px 20px;
+    font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--white);
+  }
+  .about-content {}
+  .about-manifesto {
+    font-family: var(--serif);
+    font-size: clamp(28px, 3vw, 42px);
+    font-weight: 400; line-height: 1.25;
+    margin-bottom: 36px;
+  }
+  .about-manifesto em { font-style: italic; color: var(--ochre); }
+  .about-bio {
+    font-size: 14px; line-height: 1.9;
+    color: #555; margin-bottom: 48px;
+  }
+  .about-cta-row { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+  .about-cv {
+    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    text-decoration: none; color: var(--black);
+    border-bottom: 1px solid var(--black); padding-bottom: 3px;
+    transition: color 0.3s, border-color 0.3s;
+  }
+  .about-cv:hover { color: var(--ochre); border-color: var(--ochre); }
+
+  /* NEWSLETTER */
+  .newsletter-section {
+    background: var(--black);
+    padding: 120px 60px;
+    text-align: center;
+  }
+  .newsletter-eyebrow { font-size: 9px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--ochre); margin-bottom: 32px; }
+  .newsletter-heading {
+    font-family: var(--serif);
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 400; font-style: italic;
+    color: var(--white); margin-bottom: 20px; line-height: 1.1;
+  }
+  .newsletter-sub { font-size: 13px; line-height: 1.8; color: rgba(247,245,240,0.45); margin-bottom: 48px; max-width: 420px; margin-left: auto; margin-right: auto; }
+  .newsletter-form { display: flex; max-width: 440px; margin: 0 auto; gap: 0; }
+  .newsletter-input {
+    flex: 1;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-right: none;
+    padding: 14px 20px;
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--white);
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .newsletter-input::placeholder { color: rgba(247,245,240,0.3); letter-spacing: 0.1em; }
+  .newsletter-input:focus { border-color: var(--ochre); }
+  .newsletter-btn {
+    background: var(--ochre);
+    border: 1px solid var(--ochre);
+    color: var(--white);
+    font-family: var(--sans);
+    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    padding: 14px 24px;
+    cursor: none; transition: background 0.3s;
+  }
+  .newsletter-btn:hover { background: #b8893f; }
+
+  /* FOOTER */
+  footer {
+    background: var(--white);
+    padding: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    flex-wrap: wrap; gap: 32px;
+  }
+  .footer-logo { font-family: var(--serif); font-size: 13px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; }
+  .footer-links { display: flex; gap: 32px; flex-wrap: wrap; }
+  .footer-links a { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; color: #888; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--ochre); }
+  .footer-social { display: flex; gap: 20px; }
+  .footer-social a { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; color: #888; transition: color 0.3s; }
+  .footer-social a:hover { color: var(--ochre); }
+  .footer-copy { font-size: 10px; color: #bbb; width: 100%; border-top: 1px solid rgba(0,0,0,0.06); padding-top: 24px; }
+
+  /* ======= PAGE 2: WORK ======= */
+  #page-work .work-hero {
+    height: 60vh;
+    background: var(--black);
+    display: flex; align-items: flex-end;
+    padding: 0 60px 80px;
+    position: relative; overflow: hidden;
+  }
+  #page-work .work-hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 70% at 80% 20%, rgba(205,161,94,0.1) 0%, transparent 60%);
+  }
+  #page-work .work-hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(48px, 6vw, 80px);
+    font-weight: 400; color: var(--white); line-height: 1.05;
+    position: relative; z-index: 2;
+  }
+  #page-work .work-hero h1 em { font-style: italic; color: var(--ochre); }
+  #page-work .work-hero p {
+    position: absolute; bottom: 80px; right: 60px;
+    font-size: 12px; color: rgba(247,245,240,0.4);
+    max-width: 280px; line-height: 1.7; text-align: right;
+    z-index: 2;
+  }
+
+  .work-tabs {
+    background: var(--white);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    padding: 0 60px;
+    display: flex; gap: 0;
+    position: sticky; top: 60px; z-index: 50;
+  }
+  .work-tab {
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 20px 28px;
+    cursor: none; color: #888;
+    border-bottom: 2px solid transparent;
+    transition: color 0.3s, border-color 0.3s;
+    background: none; border-top: none; border-left: none; border-right: none;
+  }
+  .work-tab.active, .work-tab:hover { color: var(--black); border-bottom-color: var(--ochre); }
+
+  .work-panel { display: none; padding: 80px 60px; }
+  .work-panel.active { display: block; }
+
+  /* All Works Grid */
+  .all-works-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
+  .work-item { text-decoration: none; color: inherit; display: block; cursor: none; }
+  .work-item-img {
+    aspect-ratio: 4/3; overflow: hidden; margin-bottom: 20px;
+  }
+  .work-item-img-inner {
+    width: 100%; height: 100%;
+    transition: transform 0.6s cubic-bezier(0.4,0,0.2,1), filter 0.6s;
+  }
+  .work-item:hover .work-item-img-inner { transform: scale(1.04); filter: brightness(0.9); }
+  .work-item-type { font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--ochre); margin-bottom: 8px; }
+  .work-item-title { font-family: var(--serif); font-size: 22px; font-weight: 400; line-height: 1.2; margin-bottom: 10px; }
+  .work-item-excerpt { font-size: 12px; line-height: 1.7; color: #666; }
+
+  /* Events */
+  .events-list { display: flex; flex-direction: column; gap: 0; }
+  .event-item {
+    display: grid; grid-template-columns: 120px 1fr auto;
+    gap: 48px; padding: 48px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    align-items: start; cursor: none;
+    text-decoration: none; color: inherit;
+    transition: opacity 0.3s;
+  }
+  .event-item:hover { opacity: 0.7; }
+  .event-date { text-align: center; }
+  .event-date-day { font-family: var(--serif); font-size: 52px; font-weight: 400; line-height: 1; color: var(--ochre); }
+  .event-date-month { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #999; }
+  .event-body {}
+  .event-name { font-family: var(--serif); font-size: 28px; font-weight: 400; margin-bottom: 8px; }
+  .event-location { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #888; margin-bottom: 12px; }
+  .event-desc { font-size: 13px; line-height: 1.7; color: #666; max-width: 600px; }
+  .event-tag { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ochre); border: 1px solid var(--ochre); padding: 6px 14px; align-self: center; }
+
+  /* Process section */
+  .process-masonry {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px; background: var(--black);
+  }
+  .process-card {
+    position: relative; overflow: hidden; cursor: none;
+    aspect-ratio: 16/9;
+  }
+  .process-card.tall { aspect-ratio: 9/10; }
+  .process-card-bg { width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
+  .process-card:hover .process-card-bg { transform: scale(1.04); }
+  .process-card-overlay {
+    position: absolute; inset: 0;
+    background: rgba(0,0,0,0.4);
+    opacity: 0; transition: opacity 0.4s;
+    display: flex; align-items: center; justify-content: center;
+    padding: 32px;
+  }
+  .process-card:hover .process-card-overlay { opacity: 1; }
+  .process-card-caption {
+    text-align: center;
+  }
+  .process-card-caption h4 { font-family: var(--serif); font-size: 22px; font-style: italic; color: var(--white); margin-bottom: 8px; }
+  .process-card-caption p { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ochre); }
+
+  /* bg for process */
+  .proc-bg-1 { background: linear-gradient(150deg, #0a0800 0%, #1a1400 100%); }
+  .proc-bg-2 { background: linear-gradient(160deg, #000a08 0%, #001410 100%); }
+  .proc-bg-3 { background: linear-gradient(140deg, #080010 0%, #100018 100%); }
+  .proc-bg-4 { background: linear-gradient(130deg, #100500 0%, #1e0c00 100%); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    nav.solid { padding: 14px 24px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .section { padding: 80px 24px; }
+    .hero-content { padding: 0 24px 60px; }
+    .hero-scroll { right: 24px; }
+    .hero-line { left: 24px; }
+    .poetry-grid { grid-template-columns: 1fr; }
+    .poem-card.large { grid-column: span 1; min-height: 340px; }
+    .essays-layout { grid-template-columns: 1fr; gap: 40px; }
+    .essays-nav { display: none; }
+    .essay-item { grid-template-columns: 1fr; }
+    .music-grid { grid-template-columns: repeat(2, 1fr); margin: 0 -24px; }
+    .music-hero-band { margin: 0 -24px; }
+    .food-title-block { grid-template-columns: 1fr; gap: 24px; }
+    .about-section { grid-template-columns: 1fr; padding: 80px 24px; }
+    .newsletter-section { padding: 80px 24px; }
+    footer { padding: 40px 24px; }
+    .strip-label { left: 24px; }
+    .featured-strip { padding-top: 48px; }
+    .all-works-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .event-item { grid-template-columns: 80px 1fr; }
+    .event-tag { display: none; }
+    .process-masonry { grid-template-columns: 1fr; }
+    .work-tabs { padding: 0 24px; overflow-x: auto; }
+    .work-panel { padding: 60px 24px; }
+    #page-work .work-hero { padding: 0 24px 60px; }
+    #page-work .work-hero p { right: 24px; position: relative; bottom: auto; margin-top: 20px; text-align: left; }
+  }
+  @media (max-width: 600px) {
+    .all-works-grid { grid-template-columns: 1fr; }
+    .music-grid { grid-template-columns: 1fr 1fr; }
+    .food-grid { grid-template-columns: 1fr; }
+    .food-card:nth-child(1) { grid-row: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+
+<!-- NAV -->
+<nav id="main-nav" class="on-hero">
+  <a href="#" class="logo" onclick="showPage('home')">IAN GWAGI H</a>
+  <ul class="nav-links">
+    <li><a href="#poetry">Poetry</a></li>
+    <li><a href="#music">Music</a></li>
+    <li><a href="#essays">Essays</a></li>
+    <li><a href="#food">Food</a></li>
+    <li><a href="#process" onclick="showPage('work'); setTimeout(()=>setTab('process'),50)">Process</a></li>
+    <li><a href="#" onclick="showPage('work'); setTimeout(()=>setTab('events'),50)">Events</a></li>
+    <li><a href="#about">About</a></li>
+    <a href="#newsletter" class="nav-newsletter">Newsletter</a>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ======= PAGE 1: HOME ======= -->
+<div id="page-home">
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-texture"></div>
+    <div class="hero-line"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Poet · Musician · Essayist · Nairobi</p>
+      <h1 class="hero-headline">A life lived in poems —<br><em>rhythm, hunger,</em><br>memory.</h1>
+      <p class="hero-sub">Stories at the intersection of breath, body, and culture. Food as politics. Sound as memory. Language as home.</p>
+      <a href="#poetry" class="hero-cta">
+        <span class="hero-cta-line"></span>
+        Explore My Work
+      </a>
+    </div>
+    <div class="hero-scroll">Scroll</div>
+  </section>
+
+  <!-- FEATURED STRIP -->
+  <div class="featured-strip">
+    <span class="strip-label">Latest Work</span>
+    <div class="strip-track" id="strip">
+      <div class="strip-item"><span class="strip-item-type">Poem</span><span class="strip-item-title">What the Cassava Remembers</span></div>
+      <div class="strip-item"><span class="strip-item-type">Essay</span><span class="strip-item-title">On Eating and Being Eaten</span></div>
+      <div class="strip-item"><span class="strip-item-type">Track</span><span class="strip-item-title">Ngoma ya Roho</span></div>
+      <div class="strip-item"><span class="strip-item-type">Photo</span><span class="strip-item-title">Thika Road at Dawn</span></div>
+      <div class="strip-item"><span class="strip-item-type">Poem</span><span class="strip-item-title">My Mother's Tongue Was a Knife</span></div>
+      <div class="strip-item"><span class="strip-item-type">Essay</span><span class="strip-item-title">Agroecology as Love Language</span></div>
+      <!-- Duplicate for seamless scroll -->
+      <div class="strip-item"><span class="strip-item-type">Poem</span><span class="strip-item-title">What the Cassava Remembers</span></div>
+      <div class="strip-item"><span class="strip-item-type">Essay</span><span class="strip-item-title">On Eating and Being Eaten</span></div>
+      <div class="strip-item"><span class="strip-item-type">Track</span><span class="strip-item-title">Ngoma ya Roho</span></div>
+      <div class="strip-item"><span class="strip-item-type">Photo</span><span class="strip-item-title">Thika Road at Dawn</span></div>
+      <div class="strip-item"><span class="strip-item-type">Poem</span><span class="strip-item-title">My Mother's Tongue Was a Knife</span></div>
+      <div class="strip-item"><span class="strip-item-type">Essay</span><span class="strip-item-title">Agroecology as Love Language</span></div>
+    </div>
+  </div>
+
+  <!-- POETRY -->
+  <section class="section" id="poetry">
+    <div class="section-label">Poetry</div>
+    <h2 class="section-heading">Words that<br><em>hold weight</em></h2>
+    <div class="poetry-grid">
+      <div class="poem-card large">
+        <div class="poem-card-bg bg-1"></div>
+        <div class="poem-card-overlay"></div>
+        <div class="poem-card-content">
+          <div class="poem-card-tag">Long Form · Featured</div>
+          <div class="poem-card-title">What the Cassava Remembers</div>
+          <div class="poem-card-excerpt">Buried and forgotten, then pulled to light — this poem traces the body's memory through soil, silence, and ceremony.</div>
+          <div class="poem-card-date">March 2025</div>
+        </div>
+      </div>
+      <div class="poem-card">
+        <div class="poem-card-bg bg-2"></div>
+        <div class="poem-card-overlay"></div>
+        <div class="poem-card-content">
+          <div class="poem-card-tag">Performance</div>
+          <div class="poem-card-title">My Mother's Tongue Was a Knife</div>
+          <div class="poem-card-excerpt">Recorded live at Nairobi National Museum.</div>
+          <div class="poem-card-date">January 2025</div>
+        </div>
+      </div>
+      <div class="poem-card">
+        <div class="poem-card-bg bg-3"></div>
+        <div class="poem-card-overlay"></div>
+        <div class="poem-card-content">
+          <div class="poem-card-tag">Photo + Text</div>
+          <div class="poem-card-title">Still Life with Market Women</div>
+          <div class="poem-card-date">November 2024</div>
+        </div>
+      </div>
+      <div class="poem-card">
+        <div class="poem-card-bg bg-4"></div>
+        <div class="poem-card-overlay"></div>
+        <div class="poem-card-content">
+          <div class="poem-card-tag">Elegy</div>
+          <div class="poem-card-title">For the River Before the Dam</div>
+          <div class="poem-card-date">October 2024</div>
+        </div>
+      </div>
+      <div class="poem-card">
+        <div class="poem-card-bg bg-5"></div>
+        <div class="poem-card-overlay"></div>
+        <div class="poem-card-content">
+          <div class="poem-card-tag">Spoken Word</div>
+          <div class="poem-card-title">The Grammar of Hunger</div>
+          <div class="poem-card-date">August 2024</div>
+        </div>
+      </div>
+    </div>
+    <a href="#" class="view-all" onclick="showPage('work'); setTimeout(()=>setTab('poetry'),50)">View All Poems →</a>
+  </section>
+
+  <!-- ESSAYS -->
+  <section class="section essays-section" id="essays">
+    <div class="section-label">Essays</div>
+    <h2 class="section-heading">Thoughts in<br><em>long form</em></h2>
+    <div class="essays-layout">
+      <ul class="essays-nav">
+        <li>All Topics</li>
+        <li>Culture</li>
+        <li>Food Politics</li>
+        <li>Social Critique</li>
+        <li>Agroecology</li>
+        <li>Language</li>
+      </ul>
+      <div class="essays-roll">
+        <a class="essay-item" href="#">
+          <div class="essay-img"><div class="essay-img-inner food-bg-1" style="height:100%;"></div></div>
+          <div class="essay-body">
+            <div class="essay-category">Food Politics</div>
+            <div class="essay-title">On Eating and Being Eaten: Notes from the Shamba</div>
+            <div class="essay-excerpt">What does it mean to grow your own food in a city that wants you to forget how? A meditation on land, labor, and the politics of the plate.</div>
+            <div class="essay-read">Read Essay</div>
+          </div>
+        </a>
+        <a class="essay-item" href="#">
+          <div class="essay-img"><div class="essay-img-inner bg-2" style="height:100%;"></div></div>
+          <div class="essay-body">
+            <div class="essay-category">Agroecology + Stories</div>
+            <div class="essay-title">Agroecology as Love Language: Feeding the Future in Swahili</div>
+            <div class="essay-excerpt">A field note from smallholder farms in central Kenya where ecological practice and oral tradition refuse to be separated.</div>
+            <div class="essay-read">Read Essay</div>
+          </div>
+        </a>
+        <a class="essay-item" href="#">
+          <div class="essay-img"><div class="essay-img-inner proc-bg-3" style="height:100%;"></div></div>
+          <div class="essay-body">
+            <div class="essay-category">Social Critique</div>
+            <div class="essay-title">The City Wants You Quiet: Sound, Space, and the Nairobi Street</div>
+            <div class="essay-excerpt">Noise ordinances, matatu culture, and the political stakes of who gets to make sound in public.</div>
+            <div class="essay-read">Read Essay</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MUSIC -->
+  <section class="section music-section" id="music">
+    <div class="section-label">Music</div>
+    <h2 class="section-heading">Sound as<br><em>testimony</em></h2>
+    <div class="music-hero-band">
+      <svg class="music-wave" viewBox="0 0 1200 60" preserveAspectRatio="none">
+        <path d="M0,30 Q50,5 100,30 Q150,55 200,30 Q250,5 300,30 Q350,55 400,30 Q450,5 500,30 Q550,55 600,30 Q650,5 700,30 Q750,55 800,30 Q850,5 900,30 Q950,55 1000,30 Q1050,5 1100,30 Q1150,55 1200,30" stroke="rgba(205,161,94,0.6)" stroke-width="1.5" fill="none"/>
+      </svg>
+      <div class="music-hero-text">
+        <h3>Ngoma ya Roho</h3>
+        <p>Latest Release · 2025</p>
+        <div class="music-player-mock" style="margin-top:24px;">
+          <div class="play-btn">
+            <svg viewBox="0 0 16 16"><polygon points="3,1 14,8 3,15"/></svg>
+          </div>
+          <div class="player-info">
+            <div class="player-title">Ngoma ya Roho</div>
+            <div class="player-sub">Ian Gwagi H · 4:32</div>
+            <div class="player-bar"><div class="player-progress"></div><div class="player-dot"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="music-grid">
+      <div class="music-tile"><div class="music-tile-bg bg-1"></div><div class="music-tile-overlay"><div class="music-tile-play"><svg viewBox="0 0 16 16"><polygon points="3,1 14,8 3,15"/></svg></div></div><div class="music-tile-info"><div class="music-tile-type">Spoken Word</div><div class="music-tile-title">The Grammar of Hunger</div></div></div>
+      <div class="music-tile"><div class="music-tile-bg bg-2"></div><div class="music-tile-overlay"><div class="music-tile-play"><svg viewBox="0 0 16 16"><polygon points="3,1 14,8 3,15"/></svg></div></div><div class="music-tile-info"><div class="music-tile-type">Live Session</div><div class="music-tile-title">Thika Road Suite</div></div></div>
+      <div class="music-tile"><div class="music-tile-bg proc-bg-1"></div><div class="music-tile-overlay"><div class="music-tile-play"><svg viewBox="0 0 16 16"><polygon points="3,1 14,8 3,15"/></svg></div></div><div class="music-tile-info"><div class="music-tile-type">Music + Poetry</div><div class="music-tile-title">Ekphrasis for a Broken Gourd</div></div></div>
+      <div class="music-tile"><div class="music-tile-bg proc-bg-2"></div><div class="music-tile-overlay"><div class="music-tile-play"><svg viewBox="0 0 16 16"><polygon points="3,1 14,8 3,15"/></svg></div></div><div class="music-tile-info"><div class="music-tile-type">Track</div><div class="music-tile-title">Soft Rain, Hard Ground</div></div></div>
+    </div>
+  </section>
+
+  <!-- FOOD -->
+  <div class="food-header" id="food">
+    <div class="section-label">The Plate & The Word</div>
+    <div class="food-title-block">
+      <h2 class="section-heading">Where hunger<br><em>becomes story</em></h2>
+      <p class="food-intro">Food is never only food. It is memory, politics, grief, and belonging. These recipes and essays live at the intersection of the kitchen and the page.</p>
+    </div>
+  </div>
+  <div class="food-grid">
+    <div class="food-card">
+      <div class="food-card-img food-bg-1" style="height:100%; aspect-ratio:unset;"></div>
+      <div class="food-card-body">
+        <div class="food-card-category">Narrative</div>
+        <div class="food-card-title">The Ugali My Grandmother Never Measured</div>
+        <div class="food-card-snippet">She knew by weight of wrist and the sound of the pot. A meditation on embodied knowledge and the recipes that resist writing.</div>
+      </div>
+    </div>
+    <div class="food-card">
+      <div class="food-card-img food-bg-2"></div>
+      <div class="food-card-body">
+        <div class="food-card-category">Recipe + Story</div>
+        <div class="food-card-title">Sukuma Wiki at the End of the Month</div>
+        <div class="food-card-snippet">On scarcity, dignity, and the underrated poetry of kale.</div>
+      </div>
+    </div>
+    <div class="food-card">
+      <div class="food-card-img food-bg-3"></div>
+      <div class="food-card-body">
+        <div class="food-card-category">Photo Essay</div>
+        <div class="food-card-title">The Colours of Gikomba Market at 5am</div>
+        <div class="food-card-snippet">Before the city wakes, the market is already alive.</div>
+      </div>
+    </div>
+    <div class="food-card">
+      <div class="food-card-img food-bg-4"></div>
+      <div class="food-card-body">
+        <div class="food-card-category">Poem + Recipe</div>
+        <div class="food-card-title">Instructions for Brewing Muratina</div>
+        <div class="food-card-snippet">A ceremonial drink, a ritual, a contraband. Notes from the homebrew underground.</div>
+      </div>
+    </div>
+    <div class="food-card" style="grid-column: span 2;">
+      <div class="food-card-img food-bg-5" style="aspect-ratio: 16/5;"></div>
+      <div class="food-card-body">
+        <div class="food-card-category">Agroecology + Story</div>
+        <div class="food-card-title">Farming the City: Hydroponics, Rooftops, and the Politics of Green</div>
+        <div class="food-card-snippet">Who gets to grow food in Nairobi? A tour through rooftop gardens and guerrilla plots that refuse to ask permission.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="about-section" id="about">
+    <div class="about-img-wrap">
+      <div class="about-img"></div>
+      <div class="about-img-label">Nairobi, Kenya</div>
+    </div>
+    <div class="about-content">
+      <div class="section-label">About</div>
+      <h2 class="about-manifesto">Stories in rhythm —<br><em>breath, body,</em><br>culture.</h2>
+      <p class="about-bio">Ian Gwagi H is a Nairobi-based poet, musician, essayist, and food writer working at the intersection of oral tradition and contemporary form. His practice spans page poetry, spoken word, original composition, and long-form cultural criticism — with a running obsession with what food reveals about power, memory, and belonging.<br><br>His work has appeared in literary journals, on stages from Nairobi to Kampala, and in field notes from agroecology projects across East Africa.</p>
+      <div class="about-cta-row">
+        <a href="#" class="about-cv">Download CV</a>
+        <a href="#" class="about-cv">Press & Mentions</a>
+        <a href="#" class="about-cv" onclick="showPage('work'); setTimeout(()=>setTab('events'),50)">Collaborations</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter-section" id="newsletter">
+    <p class="newsletter-eyebrow">Field Notes</p>
+    <h2 class="newsletter-heading">Get poems, essays,<br>and field notes<br>straight to your inbox.</h2>
+    <p class="newsletter-sub">Occasional. Unhurried. Written with care.</p>
+    <div class="newsletter-form">
+      <input class="newsletter-input" type="email" placeholder="your@email.com">
+      <button class="newsletter-btn">Subscribe</button>
+    </div>
+  </section>
+
+</div><!-- /page-home -->
+
+<!-- ======= PAGE 2: WORK ======= -->
+<div id="page-work">
+  <div class="work-hero">
+    <div class="work-hero-bg"></div>
+    <h1>All Work —<br><em>the archive.</em></h1>
+    <p>Poetry, music, essays, food writing, process notes, and events. A full record of practice.</p>
+  </div>
+  <div class="work-tabs">
+    <button class="work-tab active" onclick="setTab('all')">All Work</button>
+    <button class="work-tab" onclick="setTab('poetry')">Poetry</button>
+    <button class="work-tab" onclick="setTab('music')">Music</button>
+    <button class="work-tab" onclick="setTab('essays')">Essays</button>
+    <button class="work-tab" onclick="setTab('food')">Food</button>
+    <button class="work-tab" onclick="setTab('process')">Process</button>
+    <button class="work-tab" onclick="setTab('events')">Events</button>
+  </div>
+
+  <!-- ALL -->
+  <div class="work-panel active" data-tab="all">
+    <div class="all-works-grid">
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner bg-1"></div></div><div class="work-item-type">Poem</div><div class="work-item-title">What the Cassava Remembers</div><div class="work-item-excerpt">A poem about soil, silence, and the body's memory.</div></a>
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner food-bg-1"></div></div><div class="work-item-type">Essay</div><div class="work-item-title">On Eating and Being Eaten</div><div class="work-item-excerpt">Food politics from the shamba to the city plate.</div></a>
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner bg-2"></div></div><div class="work-item-type">Track</div><div class="work-item-title">Ngoma ya Roho</div><div class="work-item-excerpt">Spoken word and composition. 2025.</div></a>
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner proc-bg-1"></div></div><div class="work-item-type">Food + Story</div><div class="work-item-title">The Ugali My Grandmother Never Measured</div><div class="work-item-excerpt">Embodied knowledge and the recipe that resists writing.</div></a>
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner bg-3"></div></div><div class="work-item-type">Poem</div><div class="work-item-title">My Mother's Tongue Was a Knife</div><div class="work-item-excerpt">Live at Nairobi National Museum. 2025.</div></a>
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner proc-bg-2"></div></div><div class="work-item-type">Essay</div><div class="work-item-title">Agroecology as Love Language</div><div class="work-item-excerpt">Field notes from central Kenya's smallholder farms.</div></a>
+    </div>
+  </div>
+
+  <!-- POETRY TAB -->
+  <div class="work-panel" data-tab="poetry">
+    <div class="all-works-grid">
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner bg-1"></div></div><div class="work-item-type">Long Form</div><div class="work-item-title">What the Cassava Remembers</div></a>
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner bg-3"></div></div><div class="work-item-type">Performance</div><div class="work-item-title">My Mother's Tongue Was a Knife</div></a>
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner bg-4"></div></div><div class="work-item-type">Elegy</div><div class="work-item-title">For the River Before the Dam</div></a>
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner bg-5"></div></div><div class="work-item-type">Spoken Word</div><div class="work-item-title">The Grammar of Hunger</div></a>
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner bg-2"></div></div><div class="work-item-type">Photo + Text</div><div class="work-item-title">Still Life with Market Women</div></a>
+    </div>
+  </div>
+
+  <!-- MUSIC TAB -->
+  <div class="work-panel" data-tab="music">
+    <div class="all-works-grid">
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner bg-1"></div></div><div class="work-item-type">Track</div><div class="work-item-title">Ngoma ya Roho</div></a>
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner proc-bg-1"></div></div><div class="work-item-type">Live Session</div><div class="work-item-title">Thika Road Suite</div></a>
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner proc-bg-2"></div></div><div class="work-item-type">Music + Poetry</div><div class="work-item-title">Ekphrasis for a Broken Gourd</div></a>
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner bg-2"></div></div><div class="work-item-type">Track</div><div class="work-item-title">Soft Rain, Hard Ground</div></a>
+    </div>
+  </div>
+
+  <!-- ESSAYS TAB -->
+  <div class="work-panel" data-tab="essays">
+    <div class="all-works-grid">
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner food-bg-1"></div></div><div class="work-item-type">Food Politics</div><div class="work-item-title">On Eating and Being Eaten</div></a>
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner bg-2"></div></div><div class="work-item-type">Agroecology</div><div class="work-item-title">Agroecology as Love Language</div></a>
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner proc-bg-3"></div></div><div class="work-item-type">Social Critique</div><div class="work-item-title">The City Wants You Quiet</div></a>
+    </div>
+  </div>
+
+  <!-- FOOD TAB -->
+  <div class="work-panel" data-tab="food">
+    <div class="all-works-grid">
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner food-bg-1"></div></div><div class="work-item-type">Narrative</div><div class="work-item-title">The Ugali My Grandmother Never Measured</div></a>
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner food-bg-2"></div></div><div class="work-item-type">Recipe + Story</div><div class="work-item-title">Sukuma Wiki at the End of the Month</div></a>
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner food-bg-3"></div></div><div class="work-item-type">Photo Essay</div><div class="work-item-title">Gikomba Market at 5am</div></a>
+      <a class="work-item" href="#"><div class="work-item-img"><div class="work-item-img-inner food-bg-4"></div></div><div class="work-item-type">Poem + Recipe</div><div class="work-item-title">Instructions for Brewing Muratina</div></a>
+    </div>
+  </div>
+
+  <!-- PROCESS TAB -->
+  <div class="work-panel" data-tab="process">
+    <p style="font-size:13px;line-height:1.9;color:#666;max-width:560px;margin-bottom:60px;">Behind the work — draft sessions, photowalks, studio notes, and the slow thinking that happens before the page is ready.</p>
+    <div class="process-masonry">
+      <div class="process-card tall">
+        <div class="process-card-bg proc-bg-1"></div>
+        <div class="process-card-overlay"><div class="process-card-caption"><h4>Draft Sessions</h4><p>Workshop Notes · 2024</p></div></div>
+      </div>
+      <div class="process-card">
+        <div class="process-card-bg proc-bg-2"></div>
+        <div class="process-card-overlay"><div class="process-card-caption"><h4>Photowalks</h4><p>Nairobi Eastlands · Ongoing</p></div></div>
+      </div>
+      <div class="process-card">
+        <div class="process-card-bg proc-bg-3"></div>
+        <div class="process-card-overlay"><div class="process-card-caption"><h4>Studio Sessions</h4><p>Recording Notes · 2025</p></div></div>
+      </div>
+      <div class="process-card tall">
+        <div class="process-card-bg proc-bg-4"></div>
+        <div class="process-card-overlay"><div class="process-card-caption"><h4>Notes & Sketches</h4><p>Notebooks from the field</p></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVENTS TAB -->
+  <div class="work-panel" data-tab="events">
+    <div class="events-list">
+      <a class="event-item" href="#">
+        <div class="event-date"><div class="event-date-day">14</div><div class="event-date-month">Mar 2025</div></div>
+        <div class="event-body">
+          <div class="event-name">Words & Wires: Nairobi Literary Night</div>
+          <div class="event-location">Alliance Française, Nairobi</div>
+          <div class="event-desc">An evening of new poetry and improvised composition. Ian performs two new pieces alongside musicians from the Nairobi Jazz & Blues collective.</div>
+        </div>
+        <div class="event-tag">Upcoming</div>
+      </a>
+      <a class="event-item" href="#">
+        <div class="event-date"><div class="event-date-day">02</div><div class="event-date-month">Feb 2025</div></div>
+        <div class="event-body">
+          <div class="event-name">The Plate & The Word: A Public Reading</div>
+          <div class="event-location">Kuona Trust, Nairobi</div>
+          <div class="event-desc">Food, poetry, and open conversation on agroecology. Featuring recipe readings, guest chefs, and field notes from six months of research.</div>
+        </div>
+        <div class="event-tag">Past</div>
+      </a>
+      <a class="event-item" href="#">
+        <div class="event-date"><div class="event-date-day">18</div><div class="event-date-month">Nov 2024</div></div>
+        <div class="event-body">
+          <div class="event-name">Lamu Literary Festival — Keynote Reading</div>
+          <div class="event-location">Lamu Old Town, Kenya</div>
+          <div class="event-desc">Keynote spoken word performance on memory, Swahili oral tradition, and the politics of the archive.</div>
+        </div>
+        <div class="event-tag">Past</div>
+      </a>
+      <a class="event-item" href="#">
+        <div class="event-date"><div class="event-date-day">05</div><div class="event-date-month">Sep 2024</div></div>
+        <div class="event-body">
+          <div class="event-name">Kampala Biennale — Collaborative Sound</div>
+          <div class="event-location">Kampala, Uganda</div>
+          <div class="event-desc">A collaborative performance between poetry and live electronics. Co-created with sound artist Amara Diallo.</div>
+        </div>
+        <div class="event-tag">Past</div>
+      </a>
+    </div>
+  </div>
+
+</div><!-- /page-work -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Ian Gwagi H</div>
+  <div class="footer-links">
+    <a href="#" onclick="showPage('home')">Home</a>
+    <a href="#poetry">Poetry</a>
+    <a href="#music">Music</a>
+    <a href="#essays">Essays</a>
+    <a href="#food">Food</a>
+    <a href="#" onclick="showPage('work')">All Work</a>
+    <a href="#about">About</a>
+  </div>
+  <div class="footer-social">
+    <a href="#">Instagram</a>
+    <a href="#">Spotify</a>
+    <a href="#">Substack</a>
+    <a href="#">X / Twitter</a>
+  </div>
+  <div class="footer-copy">© 2025 Ian Gwagi H — All rights reserved. &nbsp;&nbsp; Privacy · Terms</div>
+</footer>
+
+<script>
+  // CURSOR
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .poem-card, .essay-item, .music-tile, .food-card, .work-item, .event-item, .process-card, .strip-item, .essays-nav li').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+
+  // NAV scroll
+  const nav = document.getElementById('main-nav');
+  let lastScrollY = 0;
+  function updateNav() {
+    const y = window.scrollY;
+    const heroH = window.innerHeight;
+    if (y > 40) { nav.classList.add('solid'); }
+    else { nav.classList.remove('solid'); }
+    const homePage = document.getElementById('page-home');
+    if (homePage.style.display !== 'none' && y < heroH * 0.8) {
+      nav.classList.add('on-hero');
+    } else {
+      nav.classList.remove('on-hero');
+    }
+    lastScrollY = y;
+  }
+  window.addEventListener('scroll', updateNav);
+  updateNav();
+
+  // PAGE SWITCHING
+  function showPage(page) {
+    const home = document.getElementById('page-home');
+    const work = document.getElementById('page-work');
+    if (page === 'home') {
+      home.style.display = 'block';
+      work.style.display = 'none';
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    } else {
+      home.style.display = 'none';
+      work.style.display = 'block';
+      window.scrollTo({top: 0, behavior: 'smooth'});
+      nav.classList.remove('on-hero');
+    }
+    updateNav();
+  }
+
+  // TABS
+  function setTab(name) {
+    document.querySelectorAll('.work-tab').forEach((t, i) => {
+      const tabs = ['all','poetry','music','essays','food','process','events'];
+      t.classList.toggle('active', tabs[i] === name);
+    });
+    document.querySelectorAll('.work-panel').forEach(p => {
+      p.classList.toggle('active', p.dataset.tab === name);
+    });
+  }
+
+  // HAMBURGER (simple toggle)
+  function toggleMenu() {
+    const links = document.querySelector('.nav-links');
+    if (links.style.display === 'flex') {
+      links.style.display = 'none';
+    } else {
+      links.style.cssText = 'display:flex; flex-direction:column; position:fixed; top:60px; left:0; right:0; background:rgba(247,245,240,0.98); padding:32px 24px; gap:24px; z-index:99; border-bottom:1px solid rgba(0,0,0,0.08);';
+    }
+  }
+
+  // Smooth anchor scroll (for same-page links)
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href').slice(1);
+      if (!id) return;
+      const el = document.getElementById(id);
+      if (el) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
